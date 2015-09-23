@@ -1,0 +1,17 @@
+
+    <div class="sg-navigation">
+	    <a href="#/datasets" title="Change Dataset">Dataset</a>: {{dataset.title}}
+	</div>
+
+	<h1>Select Analysis</h1>
+
+	<ul>
+    	
+		<li ng-repeat="analysis in analyses">
+            <a href="#/{{dataset.id}}/{{dataset.title}}/{{analysis.id}}/{{analysis.title}}/findanimal">Find Animal in {{analysis.title}}</a> or
+			<a href="#/{{dataset.id}}/{{dataset.title}}/{{analysis.id}}/{{analysis.title}}/">Advanced search {{analysis.title}}</a>
+		</li>
+		
+		
+	</ul>
+	

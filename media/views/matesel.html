@@ -1,0 +1,349 @@
+
+
+
+            <!-- main part of matesel screen -->
+<div class="col-sm-9 col-sm-offset-0 col-md-10 col-md-offset-1 main" style="background-color: #fff">
+<h2>MATESEL at Sheep Genetics</h2>
+<div ng-hide="TermsAndConditionsAccepted" ng-bind-html="TermsAndConditions">Please Wait...</div>
+<div ng-hide="TermsAndConditionsAccepted"><button ng-click="declineTermsAndConditions()">I do not accept</button><button ng-click="acceptTermsAndConditions()">I accept</button></div>
+    <div ng-show="TermsAndConditionsAccepted">
+    <div>
+    <h3>Select analysis</h3>
+                <ul class="list-group">
+                    <li class="list-group-item">Dataset: <select ng-model="selecteddataset" ng-options="dataset.title for dataset in datasets" ng-change="setDataset(selecteddataset)"></select><span ng-show="datasetsloading"><img alt="Loading..." src="/Tools/media/images/loading.gif" /></span></li>
+		            <li class="list-group-item">Analysis: <select ng-model="selectedanalysis" ng-options="analysis.title for analysis in analyses" ng-change="setAnalysis(selectedanalysis)"></select><span ng-show="analysesloading"><img alt="Loading..." src="/Tools/media/images/loading.gif" /></span></li>
+                    		        </ul>
+</div>
+       <accordion>
+            <accordion-group heading="Create run">
+                <ul class="list-group">
+                    <li class="list-group-item">Template: <select ng-model="mateseltemplate" ng-options="mstemplate.name for mstemplate in mateseltemplates"></select></li>
+		            <li class="list-group-item">Choose Index: <select ng-model="selectedNewTrait" ng-options="trait.label for trait in asbvs"></select></li>
+                    <li class="list-group-item">OR</li>
+                    <li class="list-group-item">Custom Column: <select ng-model="selectedNewCustomColumn" ng-options="columnName for columnName in customColumns"></select></li>
+		            <li class="list-group-item">Run name: <input ng-model="newmateselrunname" ng-change="invalidRunName(mateseltemplate,selectedNewTrait,selectedNewCustomColumn,newmateselrunname)"></input> <span class="errormsg">{{lastRunErrorMessage}} </span></li>
+                    <li class="list-group-item"><button ng-disabled="invalidRunName(mateseltemplate,selectedNewTrait,selectedNewCustomColumn,newmateselrunname)" ng-click="createMateselRun(mateseltemplate, selectedNewTrait,selectedNewCustomColumn,newmateselrunname)" blocking-click>Create matesel run</button> {{ lastRunSuccessMessage }} </li>
+                </ul>
+           </accordion-group>
+       </accordion>
+       <accordion>
+		<accordion-group heading="Animal lists">
+        <accordion>
+        <accordion-group heading = "New list">
+        <ul class="list-group">
+			<li class="list-group-item">New List Name: <input ng-model="newListName"></input><span class="errormsg"> {{listFailedMessage}} </span> </li>
+            <li class="list-group-item">(either load a text file from your computer or convert an existing search into an animal list)</li>
+			<li class="list-group-item">
+            
+            <input type="file" id="listFileName" onchange="angular.element(this).scope().fileNameChanged(this)"/><div ng-if="listPreviewing">
+    loading {{ lastAnimalRead }}...</div>
+            
+			</li>
+<li class="list-group-item"><button ng-click="reloadListFromFile()">Load file</button><span ng-if="editlist"><span ng-if="editlist.animals">{{ editlist.animals.length }} animals loaded
+				<input type="button" value="Preview list" ng-click="PreviewList(newListName)"/>
+				<input type="button" value="Create list" ng-disabled="invalidListName(newListName)" ng-click="CreateList(newListName)" blocking-click/> <span class="errormsg"> {{listSucceededMessage}}</span> <span ng-if="listFailedDetails.length > 0"><button ng-click="showListErrors()">Show errors</button></span>
+			</span></span>
+            </li>
+            <li class="list-group-item">
+            <label>or Your searches</label>
+			<select ng-model="selectedList" ng-options="list.label for list in savedSearches"></select>
+            <button ng-click="convertSearchToList(newListName,selectedList)" blocking-click>Convert to pedigree list</button>
+            </li>
+            </ul>
+             </accordion-group>
+       </accordion>
+       <accordion>
+        <accordion-group heading = "Existing lists">
+        <ul class="list-group">
+            <li class="list-group-item">Modify existing list <select ng-model="selectedList" ng-options="list.label for list in grouplists"></select><span ng-show="listsloading"><img alt="Loading..." src="/Tools/media/images/loading.gif" /></span></li>
+            <li class="list-group-item">
+            <table>
+            <tr>
+            <th>Custom1</th><th>Custom2</th><th>Custom3</th><th>Custom4</th><th>Custom5</th><th>Custom6</th><th>Custom7</th><th>Custom8</th><th>Custom9</th>
+            </tr>
+            <tr>
+                <td><input type=text" ng-model="selectedList.CustomColumn1"  value="selectedList.CustomColumn1" size="4"></input></td>
+                <td><input type=text" ng-model="selectedList.CustomColumn2"  value="selectedList.CustomColumn2" size="4"></input></td>
+                <td><input type=text" ng-model="selectedList.CustomColumn3"  value="selectedList.CustomColumn3" size="4"></input></td>
+                <td><input type=text" ng-model="selectedList.CustomColumn4"  value="selectedList.CustomColumn4" size="4"></input></td>
+                <td><input type=text" ng-model="selectedList.CustomColumn5"  value="selectedList.CustomColumn5" size="4"></input></td>
+                <td><input type=text" ng-model="selectedList.CustomColumn6"  value="selectedList.CustomColumn6" size="4"></input></td>
+                <td><input type=text" ng-model="selectedList.CustomColumn7"  value="selectedList.CustomColumn7" size="4"></input></td>
+                <td><input type=text" ng-model="selectedList.CustomColumn8"  value="selectedList.CustomColumn8" size="4"></input></td>
+                <td><input type=text" ng-model="selectedList.CustomColumn9"  value="selectedList.CustomColumn9" size="4"></input></td>
+            </tr>
+            </table>
+            <button ng-click="updateListColumnNames(selectedList)" blocking-click>Update Custom Column Names</button>
+            </li>
+            <!-- buttons for actions after editing above values -->
+                <li  class="list-group-item"><button ng-click="showAnimalListEditor(selectedList)" blocking-click>Edit Animals</button><button ng-click="deleteAnimalList(selectedList)" blocking-click>Delete list</button>
+                 <!-- The actual modal templates, just a bit o bootstrap -->
+                 <script type="text/ng-template" id="errorDisplay.html">
+              <div class="modal-header">
+                <button type="button" class="close" ng-click="close('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Messages from list creation</h4>
+              </div>
+              <div class="modal-body" style="height: 200px; overflow-y: scroll; overflow-x: scroll;">
+                <table>
+                <tr><th>ID</th><th>Reason</th></tr>
+                <tr ng-repeat="error in errorList">
+                <td> {{error.id}} </td>
+                <td> {{error.message}} </td>
+                </tr>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" ng-click="ok()" class="btn btn-primary">OK</button>
+              </div>
+     </script>
+     <script type="text/ng-template" id="animalEditor.html">
+         
+              <div class="modal-header">
+                <button type="button" class="close" ng-click="close('Cancel')" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Edit animals in group</h4>
+              </div>
+              <div class="modal-body" style="height: 200px; overflow-y: scroll; overflow-x: scroll;">
+                <table>
+                <tr><th>ID</th><th>Minuse</th><th>Maxuse</th><th>AbsMinUse</th><th>Action</th><th>Custom1</th><th>Custom2</th><th>Custom3</th><th>Custom4</th><th>Custom5</th><th>Custom6</th><th>Custom7</th><th>Custom8</th><th>Custom9</th></tr>
+                <tr ng-repeat="animal in editlistanimals">
+                <td>{{animal.id}} <span ng-if="animal.Updated" class="glyphicon glyphicon-pencil"></span><span ng-if="animal.Deleted" class="glyphicon glyphicon-remove"></span><span ng-if="animal.Failed" class="glyphicon glyphicon-warning-sign" title="{{animal.FailedMessage}}"></span></td>
+                <td><input type="text" ng-model="animal.MinUse" ng-change="setAnimalUpdated(animal)" value="animal.MinUse" size="4"></input></td>
+                <td><input type="text" ng-model="animal.MaxUse" ng-change="setAnimalUpdated(animal)" value="animal.MaxUse"  size="4"></input></td>
+                <td><input type="text" ng-model="animal.AbsMinUse" ng-change="setAnimalUpdated(animal)" value="animal.AbsMinUse" size="4"></input></td>
+                <td><input type="button" value="Remove" ng-click="setAnimalDeleted(animal)"/></td>
+                <td><input type=text" ng-model="animal.CustomColumn1" ng-change="setAnimalUpdated(animal)" value="animal.CustomColumn1" size="4"></input></td>
+                <td><input type=text" ng-model="animal.CustomColumn2" ng-change="setAnimalUpdated(animal)" value="animal.CustomColumn2" size="4"></input></td>
+                <td><input type=text" ng-model="animal.CustomColumn3" ng-change="setAnimalUpdated(animal)" value="animal.CustomColumn3" size="4"></input></td>
+                <td><input type=text" ng-model="animal.CustomColumn4" ng-change="setAnimalUpdated(animal)" value="animal.CustomColumn4" size="4"></input></td>
+                <td><input type=text" ng-model="animal.CustomColumn5" ng-change="setAnimalUpdated(animal)" value="animal.CustomColumn5" size="4"></input></td>
+                <td><input type=text" ng-model="animal.CustomColumn6" ng-change="setAnimalUpdated(animal)" value="animal.CustomColumn6" size="4"></input></td>
+                <td><input type=text" ng-model="animal.CustomColumn7" ng-change="setAnimalUpdated(animal)" value="animal.CustomColumn7" size="4"></input></td>
+                <td><input type=text" ng-model="animal.CustomColumn8" ng-change="setAnimalUpdated(animal)" value="animal.CustomColumn8" size="4"></input></td>
+                <td><input type=text" ng-model="animal.CustomColumn9" ng-change="setAnimalUpdated(animal)" value="animal.CustomColumn9" size="4"></input></td>
+                </tr>
+                <tr>
+                <td><input type="text" ng-model="newAnimal.id"</input></td>
+                <td colspan="13"><input type="button" value="Add Animal" ng-click="addAnimal()"/></td>
+                </tr></table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" ng-click="ok()" class="btn btn-primary">OK</button>
+                <button type="button" ng-click="cancel()" class="btn btn-warning">Cancel</button>
+              </div>
+     </script>
+                
+                </li>
+                </ul>
+                
+		</accordion-group>
+	</accordion>
+    </accordion-group>
+    </accordion>
+            <div class="sg-title">
+			<h2>Run overview</h2>
+            </div>
+            <div>Select a matesel run: <select ng-model="selectedrun" ng-options="ms.description for ms in mateselruns" ng-change="setMateselRun(selectedrun)"></select></div>
+            <div class=”table-responsive”>
+                    <table class="table table-striped" border="1">
+                        <thead>
+                            <tr>
+				    <th align="left">Run ID</th><th>User</th><th>Date</th><th>Description</th><th>Status</th><th>Analysis</th><th>Index</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+				<td>{{mateselrun.id}}</td>
+                                <td align="center">
+					{{mateselrun.user}}</td>
+                                <td align="center">
+					{{mateselrun.date}}</td>
+                                <td align="center">
+					{{mateselrun.description}}</td>
+                                <td align="center">
+					{{mateselrun.status}}<div ng-show="showRunning()"><img src="/Tools/media/images/ajax-loader-running.gif"</img></td>
+                                <td align="center">
+					{{mateselrun.analysis}}</td>
+                                <td align="center">
+					{{mateselrun.index}}</td>
+
+			</tr>
+			</tbody>
+		</table>
+        </div>
+    <accordion>
+    <accordion-group heading="Run Details for run {{mateselrun.id}} {{mateselrun.description}}">
+    <accordion>
+    <accordion-group heading="Mating groups">
+
+    <h3>Male Groups</h3>
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="mateselrungroup in mateselmalegroups">
+				<a href ng-click="mateselrungroup.show = !mateselrungroup.show" ng-drag="true" ng-drag-data="mateselrungroup"  >{{mateselrungroup.GroupNumber}} {{mateselrungroup.GroupSex}} ({{mateselrungroup.GroupListName}})</a>
+				<div ng-show="mateselrungroup.show">
+					<ul class="list-group">
+                                <li class="list-group-item">Group number: {{mateselrungroup.GroupNumber}}</li>
+                                <li class="list-group-item">Sex: {{mateselrungroup.GroupSex}}</li>
+                                <li class="list-group-item">List: {{mateselrungroup.GroupListName}} ({{mateselrungroup.GroupList}}) </li>
+                                <li class="list-group-item">Minimum use: {{mateselrungroup.GroupMinuse}}<input type="text" ng-model="mateselrungroup.GroupMinuse" value="mateselrungroup.GroupMinuse"></input></li>
+                                <li class="list-group-item">Maximum use: {{mateselrungroup.GroupMaxuse}}<input type="text" ng-model="mateselrungroup.GroupMaxuse" value="mateselrungroup.GroupMaxuse"></input></li>
+                                <li class="list-group-item">Absolute Minimum use: {{mateselrungroup.GroupAbsminuse}}<input type="text" ng-model="mateselrungroup.GroupAbsminuse" value="mateselrungroup.GroupAbsminuse"></input></li>
+                                <li class="list-group-item">Preselection: {{mateselrungroup.Preselection}}<input type="text" ng-model="mateselrungroup.Preselection" value="mateselrungroup.Preselection"></input></li>
+
+				<!-- male traits for group -->
+                <li class="list-group-item">Males can be backups: {{mateselrungroup.MalesCanBeBackups}}<input type="text" ng-model="mateselrungroup.MalesCanBeBackups" value="mateselrungroup.MalesCanBeBackups"></input></li>
+                <li class="list-group-item">Male natural mating vector: {{mateselrungroup.MaleNatMatingVector}}<input type="text" ng-model="mateselrungroup.MaleNatMatingVector" value="mateselrungroup.MaleNatMatingVector"></input></li>
+                <li class="list-group-item">
+                <ul class="list-group">
+				<li class="list-group-item" ng-repeat="permission in mateselrungroup.permissions">Male group: {{permission.MsMaleGroupNumber}}, Female group: {{permission.MsFemaleGroupAllowed}}<input type="button" value="Delete link" ng-click="deleteMatingGroupPermission(permission.MsMaleGroupNumber,permission.MsFemaleGroupAllowed)"/></li>
+                </ul></li>
+                 <li class="list-group-item"><button ng-click="showGroupAnimalEditor(mateselrungroup)">Edit Animals</button>
+                 <!-- The actual modal template, just a bit o bootstrap -->
+                </li>
+				<li  class="list-group-item"><button ng-click="updateMateselRunGroup(mateselrungroup)" blocking-click>Update</button></li>
+				<li class="list-group-item"><button ng-click="deleteMateselRunGroup(mateselrungroup)" blocking-click>Delete</button></li></ul>
+			</div>
+				</li>
+				<li class="list-group-item"></select><select ng-model="selectedMaleGroupList" ng-options="list.label for list in grouplists"></select>
+				<button ng-click="addMateselRunGroup('M',selectedMaleGroupList.id)">Add male group to run</button></li>
+
+			</ul>
+            <h3> Female Groups</h3>
+            <ul class="list-group">
+				<li class="list-group-item" ng-repeat="mateselrungroup_f in mateselfemalegroups">
+				<a href ng-click="mateselrungroup_f.show = !mateselrungroup_f.show" ng-drop="true" ng-drop-data="mateselrungroup_f" ng-drop-success="onDropGroupComplete($data,mateselrungroup_f.GroupNumber)">{{mateselrungroup_f.GroupNumber}} {{mateselrungroup_f.GroupSex}} ({{mateselrungroup_f.GroupListName}})</a>
+				<div ng-show="mateselrungroup_f.show">
+					<ul class="list-group">
+                                <li class="list-group-item">Group number: {{mateselrungroup_f.GroupNumber}}</li>
+                                <li class="list-group-item">Sex: {{mateselrungroup_f.GroupSex}}</li>
+                                <li class="list-group-item">List: {{mateselrungroup_f.GroupListName}} ({{mateselrungroup_f.GroupList}})</li>
+                                <li class="list-group-item">Minimum use: {{mateselrungroup_f.GroupMinuse}}<input type="text" ng-model="mateselrungroup_f.GroupMinuse" value="mateselrungroup_f.GroupMinuse"></input></li>
+                                <li class="list-group-item">Maximum use: {{mateselrungroup_f.GroupMaxuse}}<input type="text" ng-model="mateselrungroup_f.GroupMaxuse" value="mateselrungroup_f.GroupMaxuse"></input></li>
+                                <li class="list-group-item">Absolute Minimum use: {{mateselrungroup_f.GroupAbsminuse}}<input type="text" ng-model="mateselrungroup_f.GroupAbsminuse" value="mateselrungroup_f.GroupAbsminuse"></input></li>
+                                <li class="list-group-item">Preselection: {{mateselrungroup_f.Preselection}}<input type="text" ng-model="mateselrungroup_f.Preselection" value="mateselrungroup_f.Preselection"></input></li>
+
+	           <!-- female traits for group -->
+                <li class="list-group-item">Number of matings or selection proportion<input type="text" ng-model="mateselrungroup_f.NumMatingsOrSelnProp" value="mateselrungroup_f.NumMatingsOrSelnProp"></input></li>
+                <li class="list-group-item">Number of matings or selection proportion value<input type="text" ng-model="mateselrungroup_f.NumMatingsOrSelnPropVal" value="mateselrungroup_f.NumMatingsOrSelnPropVal"></input></li>
+                <li class="list-group-item">Invoke female nums or props<input type="text" ng-model="mateselrungroup_f.InvokeFemaleNumsOrProps" value="mateselrungroup_f.InvokeFemaleNumsOrProps"></input></li>
+                <li class="list-group-item">Maximum backups{{mateselrungroup_f.maxbackups}}<input type="text" ng-model="mateselrungroup_f.MaxBackups" value="mateselrungroup_f.MaxBackups"></input></li>
+                                <li class="list-group-item">
+                <ul class="list-group">
+				<li  class="list-group-item" ng-repeat="permission in mateselrungroup_f.permissions">Male group: {{permission.MsMaleGroupNumber}}, Female group: {{permission.MsFemaleGroupAllowed}}<input type="button" value="Delete link" ng-click="deleteMatingGroupPermission(permission.MsMaleGroupNumber,permission.MsFemaleGroupAllowed)"/></li>
+                </ul></li>
+                <li class="list-group-item"><button ng-click="showGroupAnimalEditor(mateselrungroup_f)">Edit Animals</button>
+                 <!-- The actual modal template, just a bit o bootstrap -->
+                </li>
+                <!-- buttons for actions after editing above values -->
+				<li class="list-group-item"><button ng-click="updateMateselRunGroup(mateselrungroup_f)">Update</button></li>
+				<li class="list-group-item"><button ng-click="deleteMateselRunGroup(mateselrungroup_f)">Delete</button></li>
+
+				</ul></div></li>
+				<li class="list-group-item"><select ng-model="selectedFemaleGroupList" ng-options="list.label for list in grouplists"></select>
+				<button ng-click="addMateselRunGroup('F',selectedFemaleGroupList.id)" blocking-click>Add female group to run</button></li>
+
+			</ul>
+                </accordion-group>
+
+         <accordion-group heading="Traits">
+			<ul class="list-group">
+				<li class="list-group-item" ng-repeat="mateselruntrait in mateseltraits">
+				<a href ng-click="mateselruntrait.show = !mateselruntrait.show">{{mateselruntrait.trait}}</a>
+				<div ng-show="mateselruntrait.show">
+					<ul class="list-group">
+				    <li class="list-group-item">Run ID: {{mateselruntrait.mateselrunid}}</li>
+                                <li class="list-group-item">Trait name:</li>
+                                <li class="list-group-item">Trait order: <input type="text" ng-model="mateselruntrait.traitorder" value="mateselruntrait.traitorder"></input></li>
+                                <li class="list-group-item">Invoked: <input type="text" ng-model="mateselruntrait.invoked"  value="mateselruntrait.invoked"></input></li>
+                                <li class="list-group-item">Control type: <select  ng-model="mateselruntrait.control_type" ng-options="ct.id as ct.description for ct in mateselcontroltypes"></select></li>
+				<li class="list-group-item">Weighting:  <input type="text" ng-model="mateselruntrait.weighting" value="mateselruntrait.weighting"></input></li>
+                                <li class="list-group-item">Target1: <input type="text" ng-model="mateselruntrait.target1" value="mateselruntrait.target1"></input></li>
+                                <li class="list-group-item">Target2: <input type="text" ng-model="mateselruntrait.target2" value="mateselruntrait.target2"></input></li>
+                                <li class="list-group-item">Target3: <input type="text" ng-model="mateselruntrait.target3" value="mateselruntrait.target3"></input></li>
+				<li class="list-group-item"><button ng-click="updateMateselRunTrait(mateselruntrait)" blocking-click>Update</button>
+				<li class="list-group-item"><button ng-click="deleteMateselRunTrait(mateselruntrait)" blocking-click>Delete</button></li>
+			</div>
+				</li>
+				<li class="list-group-item"><select ng-model="selectedNewTrait" ng-options="trait.label for trait in asbvs"></select>
+                
+				<button ng-click="addMateselRunTrait(selectedNewTrait)" blocking-click>Add trait to run</button>
+                <select ng-model="selectedCustomColumn" ng-options="columnName for columnName in customColumns"></select>
+                <button ng-click="addMateselCustomColumn(selectedCustomColumn)" blocking-click>Add custom column to run</button>
+                </li>
+
+			</ul>
+		</accordion-group>
+        <accordion-group heading="Run parameters">
+			<ul class="list-group" >
+				<li class="list-group-item" ng-repeat="mateselrunparam in mateselparams | orderBy:'parameter_order';">
+				<div ng-show="mateselrunparam.parameter_type != 'H'">
+				<a href ng-click="mateselrunparam.show = !mateselrunparam.show">{{mateselrunparam.parameter_name}}</a>
+				</div>
+			<div ng-show="mateselrunparam.parameter_type == 'H'">
+				{{mateselrunparam.parameter_name}}
+			</div>
+				<div ng-show="mateselrunparam.show">
+					<ul class="list-group">
+                                <li class="list-group-item">{{mateselrunparam.parameter_name}}</li>
+                                <li class="list-group-item">Type: {{mateselrunparam.parameter_type}}</li>
+				<li class="list-group-item">
+					<input ng-show="mateselrunparam.parameter_type != 'H'" type="text" ng-model="editedrunparams[mateselrunparam.parameter_order]" name="{{mateselrunparam.parameter_order}}" value="{{mateselrunparam.parameter_value}}">
+					<button ng-show="mateselrunparam.parameter_type != 'H'" ng-click="updateParameter(mateselrunparam.parameter_order)" blocking-click>Update</button>
+
+				{{mateselrunparam.parameter_value}}</li>
+                                <li class="list-group-item">
+					{{mateselrunparam.parameter_help}}</li>
+
+				</ul>
+			</div>
+            </li>
+            </ul>
+            </accordion-group>
+            </accordion>
+    </accordion-group>
+    </accordion>
+                    <p><button ng-hide="showRunning()" ng-click="startMatesel()" blocking-click>Start this matesel run</button><div ng-show="showRunning()"><img src="/Tools/media/images/ajax-loader-running.gif"</img><button ng-show="showRunning()" ng-click="stopMatesel()" blocking-click>Stop</button></div></p>
+
+<accordion><accordion-group heading="Matesel console output">
+<div style="height: 200px; overflow-y: scroll;">
+                    <p ng-repeat="output in mateselRunConsole">{{output.outputline}}</p></div>
+                    </accordion-group></accordion>
+        <!--<div class="sg-char-innert">-->
+        <!--<div class="overlay-spinner" ng-show="loadingCharts">-->
+        <!--<i class="fa fa-spinner fa-spin"></i>-->
+        <!--</div>-->
+        <accordion>
+        <accordion-group heading="Matesel frontier graph">
+        <div google-chart chart="frontierchart" class="chart" ></div>
+        </accordion-group></accordion>
+        <accordion><accordion-group heading="Matesel run summary">
+        <div style="height: 200px; overflow-y: scroll;">
+                    <p ng-repeat="output in mateselRunSummary">{{output.iniline}}</p>
+                    </div>
+                    </accordion-group></accordion>
+                    <accordion><accordion-group heading="Matesel sire summary">
+        <div style="height: 200px; overflow-y: scroll;">
+        <table class="table table-striped" border="1">
+        <thead><tr><th>Sire</th><th>Usage</th></tr></thead>
+        <tr ng-repeat="sireoutput in mateselSireSummary">
+        <td>{{ sireoutput.sire }}</td><td>{{ sireoutput.usage }}</td></tr>
+        </table>
+                    </div>
+                    </accordion-group></accordion>
+        <accordion><accordion-group heading="Matesel outputs">
+        <div style="height: 200px; overflow-y: scroll;">
+        <table class="table table-striped" border="1">
+        <thead><tr><th>Link</th><th>Output file description</th></tr></thead>
+        <tr ng-repeat="fileoutput in mateselfiles">
+        <td><a href="{{ fileoutput.url }}"> {{ fileoutput.fileName }} </a></td><td>{{ fileoutput.description }}</td></tr>
+        </table>
+                    </div>
+                    </accordion-group></accordion>
+        </div>
+</div>
+
+    <!-- LOADING SCREEN -->
+
+
+    <br clear="all" />
+
+

@@ -1,0 +1,43 @@
+﻿
+    /* //-------------------------------------------------  // */
+    /* // Mixins
+    /* //-------------------------------------------------  // */
+
+        .gradient (@origin: left, @start: #ffffff, @stop: #000000) {
+            background-color: @start;
+            background-image: -webkit-linear-gradient(@origin, @start, @stop) !important;
+            background-image: -moz-linear-gradient(@origin, @start, @stop) !important;
+            background-image: -o-linear-gradient(@origin, @start, @stop) !important;
+            background-image: -ms-linear-gradient(@origin, @start, @stop) !important;
+            background-image: linear-gradient(@origin, @start, @stop) !important;
+        }
+
+		.text-shadow(@h: 2px, @v: 2px, @color: #000000, @blur: 0px )
+		{
+			text-shadow: @h @v @blur @color;
+			filter: dropshadow(color=@color, offx=@h, offy=@v);
+
+		}
+
+		.box-shadow(@h: 2px, @v: 2px, @color: #000000, @blur: 0px, @spread: 0px )
+		{
+			webkit-box-shadow: @h @v @blur @spread @color;
+			box-shadow: @h @v @blur @spread @color;
+		}
+
+		.button(@background: #EFEFEF, @border: #9F9F9F, @color: #000)
+		{
+			width: auto;
+			padding: 2px 10px 3px 10px;
+			font-size: 12px;
+			font-family: "Cabin", Arial, Verdana, sans-serif;
+			color: @color;
+			text-decoration: none;
+			border: 2px solid @border;
+			-webkit-border-radius: 3px 3px 3px 3px;
+			border-radius: 3px 3px 3px 3px;
+			background-color: @background;
+			display: inline-block;
+			cursor: pointer;
+		}
+    

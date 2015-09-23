@@ -1,0 +1,35 @@
+
+
+
+            <!-- main part of mydetails screen -->
+<div class="col-sm-9 col-sm-offset-0 col-md-10 col-md-offset-1 main" style="background-color: #fff">
+<h2>My Details</h2>
+
+    <accordion>
+            <accordion-group heading="User preferences">
+             <ul class="list-group">
+                 <li class="list-group-item">Choose Service Provider <select ng-model="serviceprovider" ng-options="sp.description for sp in serviceproviders"></select><span ng-show="allsploading"><img alt="Loading..." src="/Tools/media/images/loading.gif" /></span></li>
+                 <li class="list-group-item"><button ng-click="nominateServiceProvider(serviceprovider)" blocking-click>Select service provider</button> {{ lastSPSuccessMessage }} </li>
+                 <li class="list-group-item">
+                 <ul class="list-group">
+                 <li class="list-group-item" ng-repeat="sp in activeserviceproviders">
+                 {{ sp.id }} : {{ sp.description }} <button ng-click="deleteServiceProvider(sp)">Delete</button>
+                 <span ng-show="sploading"><img alt="Loading..." src="/Tools/media/images/loading.gif" /></span>
+                 </li>
+                 
+                 </ul>
+                 </li>
+                 <li class="list-group-item">Set your flock home page: <input ng-model="myURL" /></input><button ng-click="setMyUrl(myURL)">Set</button></li>
+                 </ul>
+           
+           </accordion-group>
+           </accordion>
+        <!--</div>-->
+</div>
+
+    <!-- LOADING SCREEN -->
+
+
+    <br clear="all" />
+
+

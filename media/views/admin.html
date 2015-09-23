@@ -1,0 +1,40 @@
+
+
+
+            <!-- main part of mydetails screen -->
+<div class="col-sm-9 col-sm-offset-0 col-md-10 col-md-offset-1 main" style="background-color: #fff">
+<h2>Administration</h2>
+
+    <accordion>
+            <accordion-group heading="Service Providers">
+             <ul class="list-group">
+                 <li class="list-group-item">Choose Service Provider <select ng-model="activeserviceprovider" ng-options="sp.login for sp in serviceproviders"></select><span ng-show="allsploading"><img alt="Loading..." src="/Tools/media/images/loading.gif" /></span></li>
+
+                  <li class="list-group-item">
+                 <ul class="list-group">
+                 <li class="list-group-item">{{ activeserviceprovider.id }}</li>
+                 <li class="list-group-item">Login: <input ng-model="activeserviceprovider.login" /></li>
+                  <li class="list-group-item">Password: <input type="password" ng-model="activeserviceprovider.password" /></li>
+                  <li class="list-group-item">Repeat Password: <input type="password" ng-model="checkpassword" /></li>
+                   <li class="list-group-item">First Name: <input ng-model="activeserviceprovider.firstname" /></li>
+                    <li class="list-group-item">Last Name: <input ng-model="activeserviceprovider.lastname" /></li>
+                     <li class="list-group-item">Email: <input ng-model="activeserviceprovider.email" /></li>
+                      <li class="list-group-item">Maximum saved lists: <input ng-model="activeserviceprovider.maxlists" /></li>
+                 <li class="list-group-item"><button ng-click="addOrUpdateServiceProvider(activeserviceprovider)">Update</button></li>
+                 <span ng-show="sploading"><img alt="Loading..." src="/Tools/media/images/loading.gif" /></span>
+                 </li>
+                 
+                 </ul>
+                 </li>
+                 </ul>
+           </accordion-group>
+           </accordion>
+        <!--</div>-->
+</div>
+
+    <!-- LOADING SCREEN -->
+
+
+    <br clear="all" />
+
+

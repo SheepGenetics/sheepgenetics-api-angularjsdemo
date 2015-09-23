@@ -1,0 +1,12 @@
+<p>This is the partial for welcome.</p>
+
+	<h1>Select Dataset</h1>
+
+	<div class="field">
+		<ul>
+    		<li ng-repeat="dataset in datasets">
+				<a href="#/dataset/{{dataset.id}}">{{dataset.title}}</a>
+			</li>
+		</ul>
+	</div>
+		

@@ -1,0 +1,25 @@
+
+
+
+            <!-- main part of myupdates screen -->
+<div class="col-sm-9 col-sm-offset-0 col-md-10 col-md-offset-1 main" style="background-color: #fff">
+<h2>My Updates</h2>
+
+    <div ng-show="showLoading()"><img src="/Tools/media/images/ajax-loader-running.gif" alt="Loading updates" /></div>
+                <ul class="list-group">
+                <li class="list-group-item" ng-repeat="update in updates">
+                <p class="{{update.filestyle}}">
+                {{update.filename}}<br />{{update.filedate | date: 'dd/MM/yyyy hh:mm'}}<br /><a href="{{update.fileurl}}">{{update.filename}}</a>
+                </p>
+                </li>
+                </ul>
+
+        <!--</div>-->
+</div>
+
+    <!-- LOADING SCREEN -->
+
+
+    <br clear="all" />
+
+

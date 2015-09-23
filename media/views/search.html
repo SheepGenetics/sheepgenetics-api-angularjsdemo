@@ -1,0 +1,380 @@
+
+    <div id="sg-advanced">
+
+        <!-- /BREADCRUMBS -->
+
+            <div class="sg-navigation">
+                <a href="#/datasets" title="Change Dataset">Dataset</a>: {{dataset.title}}
+                &#187;
+                <a href="#/{{dataset.id}}/{{dataset.title}}" title="Change Analysis">Analysis</a>: {{analysis.title}}
+            </div>
+
+        <!-- /BREADCRUMBS -->
+
+        <!-- /TITLE -->
+
+            <div class="sg-title">
+                <h2>Advanced Sheep Genetics Search</h2>
+            </div>
+
+        <!-- /TITLE -->
+
+        <div class="sg-left">
+
+            <!-- FILTERS -->
+
+                <div class="sg-filters">
+
+                    <h3>Filter</h3>
+
+
+                    <div class="field-group active">
+
+                        <h4>
+                            <span class="icon">-</span>
+                            Breeds
+                        </h4>
+
+                        <div class="fields">
+
+                            <div class="field checkbox" ng-repeat="breed in breeds">
+                                <input type="checkbox" value="{{breed.id}}" ng-checked="breed.checked" ng-model="breed.checked" ng-change="Filter()" />
+                                <label>{{breed.title}}</label>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="field">
+                        <label>Breeder Location</label>
+                        <select ng-model="breederlocations" ng-options="i.label for i in breederlocations" ng-change="Filter()" >
+                            <option value="">{{any}}</option>
+                        </select>
+                    </div>
+
+                    <div class="field half-left">
+                        <label>Year Drop</label>
+                        <select ng-model="dropyears" ng-options="i.label for i in dropyears" ng-change="Filter()" >
+                            <option value="">{{any}}</option>
+                        </select>
+                    </div>
+
+                    <div class="field half-right">
+                        <label>Sex</label>
+                        <select ng-model="sex" ng-options="i.label for i in sexes" ng-change="Filter()">
+                            <option value="">{{any}}</option>
+                        </select>
+                    </div>
+
+                    <div class="field half-left" ng-show="woolgroups.length">
+                        <label>Wool Group</label>
+                        <select ng-model="woolgroup" ng-options="i.label for i in woolgroups" ng-change="Filter()" >
+                            <option value="">{{any}}</option>
+                        </select>
+                    </div>
+
+                    <div class="field half-left">
+                        <label>Sire Status</label>
+                        <select ng-model="sirestatus" ng-options="i.label for i in sirestatuses" ng-change="Filter()" >
+                            <option value="">{{any}}</option>
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+
+                        <h4>
+                            <span class="icon">+</span>
+                            Search By Sire Id
+                        </h4>
+
+                        <div class="fields">
+
+                            <div class="field">
+                                <label>Id <a ng-click="addNewId()">+</a></label>
+
+                                <span ng-repeat="id in ids">
+                                    <input type="text" ng-model="id.value" size="8" /><br />
+                                </span>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="field-group">
+
+                        <h4>
+                            <span class="icon">+</span>
+                            More Options
+                        </h4>
+
+                        <div class="fields">
+
+                            <div class="field spacer">
+                                <label>Sire Stud Name</label>
+                                <input type="text" ng-model="sirestudname" size="12" />
+                            </div>
+
+                            <div class="field">
+                                <label>Sire Stud Id</label>
+                                <input type="text" ng-model="sirestudid" size="8" />
+                            </div>
+
+                            <div class="field">
+                                <label>Stud Name / Flock</label>
+                                <input type="text" ng-model="studnameflock" size="12" />
+                            </div>
+
+                            <div class="field">
+                                <label>Minimum Progeny</label>
+                                <input type="text" ng-model="progenyminimum" size="12" />
+                            </div>
+
+                            <div class="field spacer checkbox">
+                                <input type="checkbox" ng-model="withcurrentdropprogeny" />
+                                <label>With Current Drop Progeny</label>
+                            </div>
+
+                            <div class="field checkbox">
+                                <input type="checkbox" ng-model="usedinmorethanoneflock" />
+                                <label>Used in more than one flock</label>
+                            </div>
+
+                            <div class="field checkbox">
+                                <input type="checkbox" ng-model="sheepcrcsire" />
+                                <label>Sheep CRC Sire</label>
+                            </div>
+
+                            <div class="field checkbox">
+                                <input type="checkbox" ng-model="merinosuperiorsire" />
+                                <label>Merino Superior Sire</label>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="field submit">
+                        <input type="button" ng-click="Search()" value="Show Results ({{querycount}})" />
+                    </div>
+
+                </div>
+
+            <!-- /FILTERS -->
+
+        </div>
+
+        <div class="sg-right">
+
+            <h3>
+                Search Results
+                <i ng-show="query.length">
+                    ({{querycount}} Results Found)
+                </i>
+            </h3>
+
+
+            <!-- ASBV CRITERIA -->
+
+            <div class="sg-traits">
+
+                <fieldset>
+
+                    <legend>General Criteria</legend>
+
+                    <div id="asbv-filters">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+                                    <th>Trait</th>
+                                    <th>Avg.</th>
+                                    <th>Min</th>
+                                    <th>Max</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                <tr ng-repeat="asbv in asbvs">
+                                    <td>
+                                        <abbr title="{{asbv.description}}">{{asbv.label}} - ({{asbv.abbrev}})</abbr>
+
+                                    </td>
+                                    <td>
+                                        5%
+                                    </td>
+                                    <td>
+                                        <input type="text" ng-model="asbv.filter_min" size="5">
+                                    </td>
+                                    <td>
+                                        <input type="text" ng-model="asbv.filter_max" size="5">
+                                    </td>
+
+                                </tr>
+
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </fieldset>
+
+            </div>
+
+            <!-- ASBV CRITERIA -->
+
+
+            <!-- SEARCH RESULTS -->
+
+                <div class="sg-results">
+
+                    <table class="table table-striped" border="1">
+                        <thead>
+                            <tr>
+                                <th align="left">Animal ID</th>
+
+                                <th ng-repeat="asbv in asbvs | filter:{display:true}">
+                                    <abbr title="{{asbv.label}} - {{asbv.description}}">{{asbv.abbrev}}</abbr>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="result in query" class="result">
+                                <td>{{result.id}}</td>
+                                <td ng-repeat="asbv in asbvs | filter:{display:true}" align="center">
+                                    {{result.data[asbv.id].value}}<br />
+                                    <small>
+                                        {{result.data[asbv.id].percentile}}%
+                                    </small>
+                                </td>
+
+                            </tr>
+                            <tr>
+                                <td colspan="{{(asbvs|filter:{display:true}).length + 1}}" class="empty" ng-show="!query.length">
+                                    No results
+                                </td>
+                            </tr>
+                        </tbody>
+
+                        <tfoot>
+                            <tr>
+                                <td colspan="{{(asbvs|filter:{display:true}).length + 1}}">
+
+                                    <span ng-show="query.length">
+                                        <pagination total-pages="totalPages" current-page="currentPage" class="pagination-small"></pagination>
+                                    </span>
+
+                                    <!-- COLUMN SELECT -->
+
+                                        <div class="sg-columns">
+
+                                            <a onclick="$(this).parent().find('div').toggle();">Select Columns &#187;</a>
+
+                                            <div class="sg-columns-toggle">
+
+                                                <ul>
+                                                    <li ng-repeat="asbv in asbvs">
+                                                        <input type="checkbox" ng-model="asbv.display" id="{{asbv.abbrev}}">
+                                                        <abbr title="{{asbv.label}} - {{asbv.description}}">{{asbv.abbrev}}</abbr>
+                                                    </li>
+                                                </ul>
+
+                                                <br clear="all" />
+                                            </div>
+
+                                        </div>
+
+                                    <!-- /COLUMN SELECT -->
+
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+
+
+                </div>
+
+            <!-- /SEARCH RESULTS -->
+
+
+        </div>
+
+
+    </div>
+
+    <!-- LOADING SCREEN -->
+
+    
+    <br clear="all" />
+
+    <!-- DEBUG -->
+
+    <p style="padding: 10px; border: 1px solid #9F9F9F; font-size: 10px; border-radius: 5px; background-color: #EFEFEF; overflow: auto; height: 500px; margin-top: 100px;">
+
+        currentPage: {{currentPage}}<br />
+        resultsPerPage: {{resultsPerPage}}<br />
+        totalPages: {{totalPages}}<br />
+        querycount: {{querycount}}<br />
+
+        --------<br />
+
+        dataset: {{dataset}}<br />
+        Total Datasets: {{datasets.length}}<br />
+
+        --------<br />
+
+        analyis: {{analysis}}<br />
+        Total Analyses: {{analyses.length}}<br />
+
+        --------<br />
+
+        ids: {{ids}}<br />
+        sirestudname: {{sirestudname}}<br />
+        sirestudid: {{sirestudid}}<br />
+        studnameflock: {{studnameflock}}<br />
+        progenyminimum: {{progenyminimum}}<br />
+        withcurrentdropprogeny: {{withcurrentdropprogeny}}<br />
+        usedinmorethanoneflock: {{usedinmorethanoneflock}}<br />
+        sheepcrcsire: {{sheepcrcsire}}<br />
+        merinosuperiorsire: {{merinosuperiorsire}}<br />
+
+        --------<br />
+
+        breed: {{selectedBreeds() | json}}<br />
+        breeds: {{breeds}}<br />
+
+        --------<br />
+
+        sex: {{sex}}<br />
+        sexes: {{sexes}}<br />
+
+        --------<br />
+
+        sirestatus: {{sirestatus}}<br />
+        sirestatuses: {{sirestatuses}}<br />
+
+        --------<br />
+
+        woolgroup: {{woolgroup}}<br />
+        woolgroups: {{woolgroups}}<br />
+
+        --------<br />
+
+        query: {{query}}<br />
+
+        --------<br />
+
+        asbvs: {{asbvs}}<br />
+
+    </p>
+
+    <!-- /DEBUG -->
+

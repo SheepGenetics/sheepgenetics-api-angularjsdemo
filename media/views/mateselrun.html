@@ -1,0 +1,107 @@
+
+    <div id="sg-advanced" ng-show="loadCount >= 4">
+
+        <!-- /BREADCRUMBS -->
+
+            <div class="sg-navigation">
+                <a href="#/datasets" title="Change Dataset">Dataset</a>: {{dataset.title}}
+                &#187;
+                <a href="#/{{dataset.id}}/{{dataset.title}}" title="Change Analysis">Analysis</a>: {{analysis.title}}
+            </div>
+
+        <!-- /BREADCRUMBS -->
+
+        <!-- /TITLE -->
+
+            <div class="sg-title">
+                <h2>Matesel Run Results</h2>
+            </div>
+
+        <!-- /TITLE -->
+
+        <div class="sg-left">
+
+
+        </div>
+
+        <div class="sg-right">
+
+
+
+            <!-- SEARCH RESULTS -->
+
+                <div class="sg-results">
+
+            <h3>
+                Matesel runs
+                <i ng-show="mateselruns.length">
+                    ({{mateselruns.length}} Results Found)
+                </i>
+            </h3>
+			<select ng-model="mateselrun" ng-options="ms.description for ms in mateselruns"></select>
+			<h4>Run overview</h4>
+                    <table class="table table-striped" border="1">
+                        <thead>
+                            <tr>
+				    <th align="left">Run ID</th><th>User</th><th>Date</th><th>Description</th><th>Status</th><th>Analysis</th><th>Index</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+				<td>{{mateselrun.id}}</td>
+                                <td align="center">
+					{{mateselrun.user}}</td>
+                                <td align="center">
+					{{mateselrun.date}}</td>
+                                <td align="center">
+					{{mateselrun.description}}</td>
+                                <td align="center">
+					{{mateselrun.status}}</td>
+                                <td align="center">
+					{{mateselrun.analysis}}</td>
+                                <td align="center">
+					{{mateselrun.index}}</td>
+
+			</tr>
+			</tbody>
+		</table>
+		<h2>Run Details for run {{mateselrun.id}} {{mateselrun.description}}</h2>
+		<h4><a href ng-click="mateselRunConsole.show = !mateselRunConsole.show">Run console</a></h4>
+		<div class="boxedDiv" >
+			<ul>
+				<li ng-repeat="consoleline in mateselRunConsole">
+				{{consoleline.linenumber}} {{consoleline.outputline}}</li>
+			</ul>
+				
+		</div>
+		<h4><a href ng-click="mateselRunIni.show = !mateselRunIni.show">Initialisation file</a></h4>
+		<div class="boxedDiv" >
+			<ul>
+				<li ng-repeat="iniline in mateselRunIni">
+				{{iniline.linenumber}} {{iniline.iniline}}</li>
+			</ul>
+				
+			</div>	
+		<h4><a href ng-click="mateselRunMatings.show = !mateselRunMatings.show">Matings file</a></h4>
+		<div class="boxedDiv" >
+			<ul>
+				<li ng-repeat="matingline in mateselRunMatings">
+				{{matingline.linenumber}} {{matingline.matingline}}</li>
+			</ul>
+				
+			</div>	
+        </div>
+
+
+    </div>
+
+    <!-- LOADING SCREEN -->
+
+    <div id="sg-loading" ng-hide="loadCount >= 4">
+        <img src="media/images/loading.gif" />
+        Loading Matesel
+    </div>
+
+    <br clear="all" />
+
+

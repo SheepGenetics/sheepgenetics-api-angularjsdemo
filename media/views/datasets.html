@@ -1,0 +1,16 @@
+﻿    <h1>Find animal by society id</h1>
+    <label>Society ID</label><input ng-model="findanimalid" /><button ng-click="FindAnimal(findanimalid)">Animal Details</button>
+    <li ng-repeat="animals in foundanimals">
+        <a href="#/{{animals.dataset}}/{{animals.title}}/{{animals.id}}/findanimal/{{findanimalid}}">{{findanimal}} found in analysis {{animals.title}}</a>
+    </li>
+	<h1>Select Dataset</h1>
+
+	<ul>
+    	
+		<li ng-repeat="dataset in datasets">
+			<a href="#/{{dataset.id}}/{{dataset.title}}">{{dataset.title}}</a>
+		</li>
+		
+	</ul>
+	
+		

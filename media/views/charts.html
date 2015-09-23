@@ -1,0 +1,206 @@
+﻿
+<div class="col-sm-9 col-sm-offset-0 col-md-10 col-md-offset-1 main" style="background-color: #fff">
+    <h2>Sheep Genetics Dashboard II</h2>
+    <small>Click <a href="http://www.sheepgenetics.org.au/Members/UserStart.aspx">here</a> to visit the original dashboard</small>
+    </div>
+<div class="col-sm-9 col-sm-offset-0 col-md-10 col-md-offset-1 main" style="background-color: #fff">
+
+
+<accordion>
+            <accordion-group heading="Select analysis">
+    <ul class="list-group">
+            <li class="list-group-item"><label>Dataset</label>
+            <select data-ng-model="selection.global.dataset"
+                    data-ng-options="dataset.title for dataset in datasets"
+                    ng-disabled="!credentialsAccepted">
+                <option value="">-- please select --</option>
+            </select>
+        </li>
+
+        <li class="list-group-item" ng-class="setDisabledClass(!selection.global.dataset)">
+            <label>Analyses</label>
+            <select data-ng-model="selection.global.analysis"
+                    data-ng-options="analysis.title for analysis in analyses"
+                    ng-disabled="!selection.global.dataset">
+                <option value="">-- please select --</option>
+            </select>
+            <i class="fa fa-spinner fa-spin" ng-show="loadingAnalysis"></i>
+        </li>
+
+        <li class="list-group-item" ng-class="setDisabledClass(!selection.global.analysis)">
+            <label>Flocks</label>
+            <select data-ng-model="selection.global.flock" multiple class="form-control"
+                    data-ng-options="flock.breed_flock_code as (flock.breed_flock_code + ' - ' + flock.description) for flock in flocks"
+                    ng-disabled="!selection.global.analysis">
+                <option value="">-- please select --</option>
+            </select>
+            <i class="fa fa-spinner fa-spin" ng-show="loadingFlocks"></i>
+        </li>
+
+    <li class="list-group-item">
+            <label>Since Year</label>
+            <select data-ng-model="selection.global.year"
+                    data-ng-options="year for year in years">
+                <option value="">-- please select --</option>
+            </select>
+        </li>
+
+        <li class="list-group-item">
+            <label>Chart type</label>
+            <select data-ng-model="selection.global.chartType"
+                    data-ng-options="type for type in chartTypes">
+            </select>
+        </li></ul>
+    </accordion-group>
+</accordion>
+
+<div class="col-lg-6 col-md-6 panel-1" style="background-color: #fff">
+
+    <h3><i class="fa fa-bar-chart-o"></i> Genetic Trend 1</h3>
+    <div class="form-group" ng-class="setDisabledClass(!selection.global.flock)">
+        <label>Breakdown</label>
+        <select data-ng-model="selection.chart1.breakdown"
+                data-ng-options="breakdown for breakdown in chart1Breakdowns"
+                ng-disabled="!selection.global.flock">
+            <option value="">-- please select --</option>
+        </select>
+        <i class="fa fa-spinner fa-spin" ng-show="loadingBreakdowns"></i>
+    </div>
+
+    <div class="form-group" ng-class="setDisabledClass(!selection.chart1.breakdown)">
+        <label>Traits</label>
+        <select data-ng-model="selection.chart1.trait"
+                data-ng-options="trait.id as (trait.abbrev + ' - ' + trait.description) for trait in chart1Traits"
+                ng-disabled="!selection.chart1.breakdown">
+            <option value="">-- please select --</option>
+        </select>
+        <i class="fa fa-spinner fa-spin" ng-show="loadingChart1Traits"></i>
+    </div>
+
+    <div class="form-group">
+        <input type="checkbox" data-ng-model="selection.chart1.accuracies" />
+        <span class="checkbox-span">Show Accuracies</span>
+    </div>
+
+
+    <div class="sg-chart">
+        <!--<div class="sg-char-innert">-->
+        <!--<div class="overlay-spinner" ng-show="loadingCharts">-->
+        <!--<i class="fa fa-spinner fa-spin"></i>-->
+        <!--</div>-->
+        <div class="sg-overlay" ng-show="!selection.chart1.trait">
+            <!--<i class="fa fa-spinner fa-spin"></i>-->
+            <div class="message"><i class="fa fa-warning"></i> Please make a selection</div>
+        </div>
+        <div google-chart chart="chart1" class="chart"></div>
+        <!--</div>-->
+    </div>
+
+</div>
+
+<div class="col-lg-6 col-md-6 panel-2" style="background-color: #fff">
+    <h3><i class="fa fa-bar-chart-o"></i>  Genetic Trend 2</h3>
+    <div class="form-group" ng-class="setDisabledClass(!selection.global.flock)">
+        <label>Breakdown</label>
+        <select data-ng-model="selection.chart2.breakdown"
+                data-ng-options="breakdown for breakdown in chart2Breakdowns"
+                ng-disabled="!selection.global.flock">
+            <option value="">-- please select --</option>
+        </select>
+        <i class="fa fa-spinner fa-spin" ng-show="loadingBreakdowns"></i>
+    </div>
+
+    <div class="form-group" ng-class="setDisabledClass(!selection.chart2.breakdown)">
+        <label>Traits</label>
+        <select data-ng-model="selection.chart2.trait"
+                data-ng-options="trait.id as (trait.abbrev + ' - ' + trait.description) for trait in chart2Traits"
+                ng-disabled="!selection.chart2.breakdown">
+            <option value="">-- please select --</option>
+        </select>
+        <i class="fa fa-spinner fa-spin" ng-show="loadingChart2Traits"></i>
+    </div>
+
+    <div class="form-group ">
+        <input type="checkbox" data-ng-model="selection.chart2.accuracies" />
+        <span class="checkbox-span">Show Accuracies</span>
+    </div>
+
+
+    <div class="sg-chart">
+        <!--<div class="sg-chart-inner">-->
+        <!--<div class="overlay-spinner" ng-show="loadingCharts">-->
+        <!--<i class="fa fa-spinner fa-spin"></i>-->
+        <!--</div>-->
+        <div class="sg-overlay" ng-show="!selection.chart2.trait">
+            <!--<i class="fa fa-spinner fa-spin"></i>-->
+            <div class="message"><i class="fa fa-warning"></i> Please make a selection</div>
+        </div>
+        <div google-chart chart="chart2" class="chart"></div>
+        <!--</div>-->
+    </div>
+</div>
+
+<div class="col-lg-12 col-md-12 panel-2" style="background-color: #fff">
+<accordion>
+            <accordion-group heading="ASBV Distribution">
+<ul class="list-group">
+<li class="list-group-item">
+ <div class="sg-chart">
+        <!--<div class="sg-char-innert">-->
+        <!--<div class="overlay-spinner" ng-show="loadingCharts">-->
+        <!--<i class="fa fa-spinner fa-spin"></i>-->
+        <!--</div>-->
+        <div class="sg-overlay" ng-show="!selection.chart1.trait">
+            <!--<i class="fa fa-spinner fa-spin"></i>-->
+            <div class="message"><i class="fa fa-warning"></i> Please make a selection</div>
+        </div>
+        <div google-chart chart="distributionchart1" class="chart"></div>
+        <!--</div>-->
+    </div>
+    </li>
+    <li class="list-group-item">
+     <div class="sg-chart">
+        <!--<div class="sg-char-innert">-->
+        <!--<div class="overlay-spinner" ng-show="loadingCharts">-->
+        <!--<i class="fa fa-spinner fa-spin"></i>-->
+        <!--</div>-->
+        <div class="sg-overlay" ng-show="!selection.chart2.trait">
+            <!--<i class="fa fa-spinner fa-spin"></i>-->
+            <div class="message"><i class="fa fa-warning"></i> Please make a selection</div>
+        </div>
+        <div google-chart chart="distributionchart2" class="chart"></div>
+        <!--</div>-->
+    </div>
+    </li>
+    </ul>
+    </accordion-group>
+    </accordion>
+    </div>
+
+
+
+<div class="col-lg-6 col-md-6 panel-2" style="background-color: #fff">
+    <h3><i class="fa fa-bar-chart-o"></i> Generation Intervals</h3>
+    <div class="sg-chart">
+        <div class="sg-overlay" ng-show="!selection.global.flock">
+            <div class="message"><i class="fa fa-warning"></i> Awaiting a Flock</div>
+        </div>
+        <div google-chart chart="chartIntervalsMale" class="chart"></div>
+    </div>
+</div>
+
+<div class="col-lg-6 col-md-6 panel-3" style="background-color: #fff">
+    <h3><i class="fa fa-bar-chart-o"></i> Generation Intervals</h3>
+    <div class="sg-chart">
+        <div class="sg-overlay" ng-show="!selection.global.flock">
+            <div class="message"><i class="fa fa-warning"></i> Awaiting a Flock</div>
+        </div>
+        <div google-chart chart="chartIntervalsFemale" class="chart"></div>
+    </div>
+</div>
+
+
+
+<div>{{ jsonResult }}</div>
+
+</div>
